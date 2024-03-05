@@ -11,6 +11,9 @@ import {board} from "./board";
     shipOne.placeShip(arr, gameBoard.addShipToArr)
     shipTwo.placeShip(arr, gameBoard.addShipToArr)
 
+    gameBoard.receiveAttack(20, 'X', '?')
+    gameBoard.receiveAttack(15, 'X', '?')
+
     // DEBUG
     console.log(arr)
     console.log(gameBoard.placedShips)

@@ -8,21 +8,21 @@ describe('Creating game board & placing ships.', () => {
     test('Placement of longest ship (Length: 6)', () => {
         let gameBoard = board.GameGrid()
         let arr = gameBoard.arr
-        let ship = board.Ship(6, [0, 1, 2, 3, 4, 5])
+        let ship = board.Ship([0, 1, 2, 3, 4, 5])
 
-        expect(ship.placeShip(arr, gameBoard.addShipToArr)).toBe('Ship placed.')
+        expect(ship.placeShip(arr, gameBoard.addShipToArr)).toBe(true)
     })
     test('Placement of shortest ship (Length: 2)', () => {
         let gameBoard = board.GameGrid()
         let arr = gameBoard.arr
-        let ship = board.Ship(2, [20, 21])
+        let ship = board.Ship([20, 21])
 
-        expect(ship.placeShip(arr, gameBoard.addShipToArr)).toBe('Ship placed.')
+        expect(ship.placeShip(arr, gameBoard.addShipToArr)).toBe(true)
     })
     test('placedShips array has ships stored after placing ship.' ,() => {
         let gameBoard = board.GameGrid()
         let arr = gameBoard.arr
-        let ship = board.Ship(6, [0, 1, 2, 3, 4, 5])
+        let ship = board.Ship([0, 1, 2, 3, 4, 5])
 
         ship.placeShip(arr, gameBoard.addShipToArr)
 
@@ -37,12 +37,12 @@ describe('Creating game board & placing ships.', () => {
         let gameBoard = board.GameGrid()
         let arr = gameBoard.arr
 
-        let ship = board.Ship(6, [0, 1, 2, 3, 4, 5])
-        let shipTwo = board.Ship(6, [0, 1, 2, 3, 4, 5])
+        let ship = board.Ship([0, 1, 2, 3, 4, 5])
+        let shipTwo = board.Ship([0, 1, 2, 3, 4, 5])
 
         ship.placeShip(arr, gameBoard.addShipToArr)
 
         // When trying to place ship in the same spot as the above ship.
-        expect(shipTwo.placeShip(arr, gameBoard.addShipToArr)).toBe('Spot occupied!')
+        expect(shipTwo.placeShip(arr, gameBoard.addShipToArr)).toEqual(false)
     })
 });
