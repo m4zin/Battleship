@@ -3,7 +3,8 @@
 
 :root {
     --main-bg-color: #171717;
-    --header-font-color: #5b21b6;
+    --header-font-color: #ea580c;
+    --footer-font-color: #be123c;
     --font-family: "Press Start 2P", system-ui;
     --font-weight: 400;
     --font-style: normal;
@@ -54,7 +55,7 @@ footer {
 }
 
 footer a {
-    color: var(--header-font-color);
+    color: var(--footer-font-color);
     text-decoration: none;
 }
 
@@ -74,7 +75,12 @@ footer a {
 
 .board-one,
 .board-two {
-    border: 1px solid #FFFFFF;
+    display: flex;
+    flex-wrap: wrap;
     height: 400px;
     width: 400px;
+}
+
+.cell {
+    border: 1px solid #a1a1aa;
 }

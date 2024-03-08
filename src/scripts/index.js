@@ -14,7 +14,6 @@ function typeWriteHeading() {
     typeWriteHeading()
 
     // const gameBoard = board.GameGrid()
-    //
     // let arr = gameBoard.arr
     //
     // let shipOne = board.Ship([0, 1, 2])
@@ -22,6 +21,8 @@ function typeWriteHeading() {
     //
     // shipOne.placeShip(arr, gameBoard.addShipToArr)
     // shipTwo.placeShip(arr, gameBoard.addShipToArr)
+
+    board.initCellsOfBoard()
 
     // DEBUG
     // console.log(arr)
