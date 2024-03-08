@@ -1,3 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+:root {
+    --main-bg-color: #171717;
+    --header-font-color: #5b21b6;
+    --font-family: "Press Start 2P", system-ui;
+    --font-weight: 400;
+    --font-style: normal;
+    --footer-and-state-font-family: "Roboto", sans-serif;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,5 +17,64 @@
 }
 
 body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 100vh;
+    width: 100%;
+    background-color: var(--main-bg-color);
+}
+
+.game {
+    height: inherit;
+    width: inherit;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 4fr 1fr;
+}
+
+header,
+footer {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight);
+    font-style: var(--font-style);
+}
+
+header {
+    flex-direction: column;
+    color: var(--header-font-color);
+}
+
+footer {
+    font-size: 18px;
+    font-family: var(--footer-and-state-font-family);
+}
+
+footer a {
+    color: var(--header-font-color);
+    text-decoration: none;
+}
+
+.game-boards {
+    display: grid;
+    grid-template-columns: 5fr 1fr 5fr;
+    grid-template-rows: 1fr;
+    justify-items: center;
+    align-items: center;
+}
+
+.player-state {
+    font-size: 18px;
+    font-family: var(--footer-and-state-font-family);
+    color: white;
+}
+
+.board-one,
+.board-two {
+    border: 1px solid #FFFFFF;
+    height: 400px;
+    width: 400px;
 }
