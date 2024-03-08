@@ -11,6 +11,7 @@ const board = (function() {
                 // in game board.
                 storeShip(coordinates)
 
+                // This is the array that is acting as the gameBoard.
                 for (let i = 0; i < coordinates.length; i++) {
                     arr[coordinates[i]] = 1 // Placing ship on board.
                 }
@@ -32,23 +33,24 @@ const board = (function() {
             placedShips.push(coordinates)
         }
 
-        let receiveAttack = (attack, hitMarker, noHitMarker) => {
+        let receiveAttack = (e) => {
+
+            let cell = e.getAttribute('value')
+
             if(placedShips) {
-                // Attack being received by ship as a whole.
-                // This helps in identifying the ship as a whole.
+                // This helps in identifying the ship as a whole when a cell is hit.
+                    // The cell has to be a part of the ship.
                 for(let i = 0; i < placedShips.length; i++) {
                     for(let j = 0; j < placedShips[i].length; j++) {
-                        if(attack === placedShips[i][j]) {
-                            placedShips[i][j] = hitMarker
-                            arr[attack] = hitMarker
-                            return true
+                        // If cell is a part of placed ships, then display ships attacked!,
+                        // Else display empty cell hit.
+                        if(cell === placedShips[i][j]) {
+
+                        } else {
+
                         }
                     }
                 }
-
-                // Or if cell with no ship contained hit, then
-                arr[attack] = noHitMarker
-                return false
             }
         }
 
