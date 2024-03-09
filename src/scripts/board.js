@@ -34,7 +34,6 @@ const board = (function() {
         }
 
         let receiveAttack = (e) => {
-
             let cell = e.getAttribute('value')
 
             if(placedShips) {
@@ -70,8 +69,26 @@ const board = (function() {
         }
     }
 
+    function setShipOnCells(event) {
+        let hoveredOverCell = parseInt(event.target.id)
+        let currCell = null;
+        let arrCells = []
+
+        if (hoveredOverCell < 4) {
+            return false
+        }
+
+        for (let i = hoveredOverCell; i >= hoveredOverCell - 4; i--) {
+            currCell = document.getElementById(`${i}`)
+            arrCells.push(currCell)
+        }
+
+        return arrCells
+
+    }
+
     function addDivsToBoard(board) {
-        let numOfLoops = 100; // Cause' 100 cells.
+        let numOfLoops = 100; // adding 100 square divs to board.
         let areaOfInsideSquare = 400 / 10
 
         for (let i = 0; i < numOfLoops; i++) {
@@ -79,6 +96,7 @@ const board = (function() {
 
             cell.classList.add("cell");
             cell.setAttribute('value', `${i}`)
+            cell.id = `${i}`
             cell.style.height = `${areaOfInsideSquare}px`;
             cell.style.width = `${areaOfInsideSquare}px`;
             board.appendChild(cell);
@@ -93,10 +111,19 @@ const board = (function() {
         addDivsToBoard(computerBoard)
     }
 
+    function onHoverOfCells() {
+        const board = document.querySelector('.board-one')
+
+        board.addEventListener('mouseover', (event) => {
+            setShipOnCells(event)
+        })
+    }
+
     return {
         GameGrid,
         Ship,
-        initCellsOfBoard
+        initCellsOfBoard,
+        onHoverOfCells
     }
 })()
 
