@@ -1,3 +1,5 @@
+import {deploy} from "./shipsToDeploy";
+
 const board = (function() {
     function Ship(coordinates) {
         let placeShip = (arr, storeShip) => {
@@ -71,59 +73,64 @@ const board = (function() {
 
     function setShipOnCells(event) {
         let hoveredOverCell = parseInt(event.target.id)
-        let currCell = null;
         let arrCells = []
 
-        if (hoveredOverCell < 4) {
-            return false
-        }
+        // TODO: Using the same logic below,
+            // Create 5 different ships of different length.
+            // Make sure they are all made from one single function.
+            // One should be placed after another.
 
-        for (let i = hoveredOverCell; i >= hoveredOverCell - 4; i--) {
-            currCell = document.getElementById(`${i}`)
-            arrCells.push(currCell)
-        }
-
-        return arrCells
-
+        // this is returning array tailored only for ship of length 5 for now.
+        // Make sure to implement the above to-do properly.
+        return deploy.shipOfLen(4, hoveredOverCell, arrCells)
     }
 
-    function addDivsToBoard(board) {
-        let numOfLoops = 100; // adding 100 square divs to board.
-        let areaOfInsideSquare = 400 / 10
-
-        for (let i = 0; i < numOfLoops; i++) {
-            let cell = document.createElement("div");
-
-            cell.classList.add("cell");
-            cell.setAttribute('value', `${i}`)
-            cell.id = `${i}`
-            cell.style.height = `${areaOfInsideSquare}px`;
-            cell.style.width = `${areaOfInsideSquare}px`;
-            board.appendChild(cell);
+    function highlightCells(result, color) {
+        // If any of the cells contain orange (place shipped then return.)
+        if (result.some((elem) => elem.style.backgroundColor === 'red')) {
+            return
         }
-    }
 
-    function initCellsOfBoard() {
-        const playerBoard = document.querySelector('.board-one')
-        const computerBoard = document.querySelector('.board-two')
-
-        addDivsToBoard(playerBoard)
-        addDivsToBoard(computerBoard)
-    }
-
-    function onHoverOfCells() {
-        const board = document.querySelector('.board-one')
-
-        board.addEventListener('mouseover', (event) => {
-            setShipOnCells(event)
+        result.forEach((item) => {
+            item.style.backgroundColor = color
         })
+    }
+
+    function onAndOffHover(event, callback) {
+        let result = setShipOnCells(event)
+
+        if(result instanceof Array) {
+            if(event.type === 'mouseover') {
+                callback(result, 'grey');
+            } else if(event.type === 'mouseleave') {
+                callback(result, 'transparent');
+            } else if (event.type === 'click') {
+                callback(result, 'red')
+            }
+        }
+    }
+
+    function initHoverOfCells() {
+        const board = document.querySelector('.board-one')
+        const cells = board.querySelectorAll('.cell')
+
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].addEventListener('mouseover', (event) => {
+                onAndOffHover(event, highlightCells)
+            })
+            cells[i].addEventListener('mouseleave', (event) => {
+                onAndOffHover(event, highlightCells)
+            })
+            cells[i].addEventListener('click', (event) => {
+                onAndOffHover(event, highlightCells)
+            })
+        }
     }
 
     return {
         GameGrid,
         Ship,
-        initCellsOfBoard,
-        onHoverOfCells
+        initHoverOfCells
     }
 })()
 

@@ -1,4 +1,5 @@
 import {board} from "./board";
+import {create} from "./createBoard";
 import '../styles.css'
 import Typewriter from 'typewriter-effect/dist/core';
 
@@ -13,11 +14,7 @@ function typeWriteHeading() {
 (function() {
     typeWriteHeading()
 
-    board.initCellsOfBoard()
-    board.onHoverOfCells()
-
-    // DEBUG
-    // console.log(arr)
-    // console.log(gameBoard.placedShips)
+    create.initCellsOfBoard()
+    board.initHoverOfCells()
 })()
 
