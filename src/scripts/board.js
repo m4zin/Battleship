@@ -86,7 +86,7 @@ const board = (function() {
     }
 
     function highlightCells(result, color) {
-        // If any of the cells contain orange (place shipped then return.)
+        // If any of the cells contain red (placed ship) then return.
         if (result.some((elem) => elem.style.backgroundColor === 'red')) {
             return
         }
