@@ -3,7 +3,7 @@ const deploy = (function() {
         let currCell = null
 
         if (hoveredOverCell < length) {
-            return false
+            return
         }
 
         for (let i = hoveredOverCell; i >= hoveredOverCell - length; i--) {
@@ -11,24 +11,31 @@ const deploy = (function() {
             arrCells.push(currCell)
         }
 
-        if(!arrCells) {
-            return false
-        }
+        // Is this needed? Idk.
+        // if (!arrCells) {
+        //     return
+        // }
 
-        // Making sure that ship can only be placed in one single row
-            // for horizontal case.
-        let startingNumOfRow = arrCells[0].id.charAt(0)
+        if (!placeInOneRow(arrCells)) {
+            return
+        }        
+
+        return arrCells
+    }
+
+    // Making sure that ship can only be placed in one single row for horizontal case.
+    function placeInOneRow(arrOfCells) {
+        let startNumOfRow = arrOfCells[0].id.charAt(0)
 
         // If it's the first row, then no need for check.
-        if(arrCells[0].id.length !== 1) {
-            for (let i = 1; i < arrCells.length; i++) {
-                if(arrCells[i].id.charAt(0) !== startingNumOfRow) {
-                    return
+        if (arrOfCells[0].id.length !== 1) {
+            for (let i = 1; i < arrOfCells.length; i++) {
+                if(arrOfCells[i].id.charAt(0) !== startNumOfRow) {
+                    return false
                 }
             }
         }
-
-        return arrCells
+        return true
     }
 
     return {
