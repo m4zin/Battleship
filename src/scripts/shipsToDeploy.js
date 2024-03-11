@@ -1,5 +1,6 @@
 const deploy = (function() {
-    function shipOfLen(length, hoveredOverCell, arrCells) {
+    function shipOfLen(length, hoveredOverCell) {
+        let arrCells = []
         let currCell = null
 
         if (hoveredOverCell < length) {

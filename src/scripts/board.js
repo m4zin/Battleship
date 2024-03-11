@@ -3,8 +3,8 @@ import {deploy} from "./shipsToDeploy";
 const board = (function() {
     function Ship(coordinates) {
         let placeShip = (arr, storeShip) => {
-            if(coordinates.length > 1 && coordinates.length < 7) {
-                if(checkIfOccupied(arr, coordinates)) {
+            if (coordinates.length > 1 && coordinates.length < 7) {
+                if (checkIfOccupied(arr, coordinates)) {
                     return false
                 }
 
@@ -17,7 +17,7 @@ const board = (function() {
                 for (let i = 0; i < coordinates.length; i++) {
                     arr[coordinates[i]] = 1 // Placing ship on board.
                 }
-
+                
                 return true
             }
         }
@@ -38,7 +38,7 @@ const board = (function() {
         let receiveAttack = (e) => {
             let cell = e.getAttribute('value')
 
-            if(placedShips) {
+            if (placedShips) {
                 // This helps in identifying the ship as a whole when a cell is hit.
                     // The cell has to be a part of the ship.
                 for(let i = 0; i < placedShips.length; i++) {
@@ -65,7 +65,7 @@ const board = (function() {
 
     function checkIfOccupied(arr, coordinates) {
         for (let i = 0; i < coordinates.length; i++) {
-            if(arr[coordinates[i]] === 1) {
+            if (arr[coordinates[i]] === 1) {
                 return true
             }
         }
@@ -73,7 +73,6 @@ const board = (function() {
 
     function setShipOnCells(event) {
         let hoveredOverCell = parseInt(event.target.id)
-        let arrCells = []
 
         // TODO: Using the same logic below,
             // Create 5 different ships of different length.
@@ -82,7 +81,7 @@ const board = (function() {
 
         // this is returning array tailored only for ship of length 5 for now.
         // Make sure to implement the above to-do properly.
-        return deploy.shipOfLen(4, hoveredOverCell, arrCells)
+        return deploy.shipOfLen(4, hoveredOverCell)
     }
 
     function highlightCells(result, color) {
@@ -99,7 +98,7 @@ const board = (function() {
     function onAndOffHover(event, callback) {
         let result = setShipOnCells(event)
 
-        if(result instanceof Array) {
+        if (result instanceof Array) {
             if(event.type === 'mouseover') {
                 callback(result, 'grey');
             } else if(event.type === 'mouseleave') {
