@@ -1,56 +1,50 @@
 import { board } from "./board"
 
 const deploy = (function () {
-    function shipOfLen(length, hoveredOverCell) {
+    function pushShipIntoArr(length, hoveredOverCell, subtractCells) {
         let arrCells = []
         let currCell = null
 
-        // If ship going out of bound, then return.
-        if (hoveredOverCell < length - 1) {
-            return
-        }
-
-        for (let i = hoveredOverCell; i > hoveredOverCell - length; i--) {
-            currCell = document.getElementById(`${i}`)
+        for (let i = 0; i < length; i++) {
+            currCell = document.getElementById(`${hoveredOverCell}`)
+            if (currCell === null) {
+                return
+            }
             arrCells.push(currCell)
-        }
-
-        // Is this needed? Idk.
-        // if (!arrCells) {
-        //     return
-        // }
-
-        if (hasSurroundingShips(board.gameArr, arrCells) || placeInOneRow(arrCells)) {
-            return
+            hoveredOverCell = hoveredOverCell - subtractCells
         }
 
         return arrCells
     }
 
-    // Making sure that ship can only be placed in one single row for horizontal case.
+    function shipOfLen(length, hoveredOverCell, shipPosition) {
+        let finalArr = null
+
+        if (shipPosition) {
+            finalArr = pushShipIntoArr(length, hoveredOverCell, 1)
+
+            if (finalArr !== undefined && placeInOneRow(finalArr)) {
+                return
+            }
+        } else {
+            finalArr = pushShipIntoArr(length, hoveredOverCell, 10)
+        }
+
+        // If ship going out of bound (or technically empty), then return.
+        if (finalArr === undefined) {
+            return
+        }
+
+        return finalArr
+    }
+
     function placeInOneRow(arrOfCells) {
         let startNumOfRow = arrOfCells[0].id.charAt(0)
 
-        // If it's the first row, then no need for check.
         if (arrOfCells[0].id.length !== 1) {
             for (let i = 1; i < arrOfCells.length; i++) {
                 if (arrOfCells[i].id.charAt(0) !== startNumOfRow) {
                     return true
-                }
-            }
-        }
-        return false
-    }
-
-    function hasSurroundingShips(boardArr, arrCells) {
-        for (let i = 0; i < arrCells.length; i++) {
-            let cell = parseInt(arrCells[i].id);
-            let offsets = [-11, -10, -9, -1, 1, 9, 10, 11];
-
-            for (let offset of offsets) {
-                let neighbor = cell + offset;
-                if (boardArr[neighbor] === 1) {
-                    return true;
                 }
             }
         }
