@@ -14,7 +14,6 @@ const create = (function() {
             board.appendChild(cell);
         }
     }
-    
 
     function initCellsOfBoard() {
         const playerBoard = document.querySelector('.board-one')

@@ -1,6 +1,9 @@
-import {deploy} from "./shipsToDeploy";
+import { deploy } from "./shipsToDeploy";
 
-const board = (function() {
+const board = (function () {
+    let game = GameGrid()
+    let gameArr = game.arr
+
     function Ship(coordinates) {
         let placeShip = (arr, storeShip) => {
             if (coordinates.length > 1 && coordinates.length < 7) {
@@ -17,7 +20,7 @@ const board = (function() {
                 for (let i = 0; i < coordinates.length; i++) {
                     arr[coordinates[i]] = 1 // Placing ship on board.
                 }
-                
+
                 return true
             }
         }
@@ -31,6 +34,8 @@ const board = (function() {
         let arr = new Array(100).fill(null)
         let placedShips = []
 
+        // This is used as a callback for the function Ship.placeShip() to push the ship coordinates
+        // into placedShips [].
         let addShipToArr = (coordinates) => {
             placedShips.push(coordinates)
         }
@@ -40,12 +45,12 @@ const board = (function() {
 
             if (placedShips) {
                 // This helps in identifying the ship as a whole when a cell is hit.
-                    // The cell has to be a part of the ship.
-                for(let i = 0; i < placedShips.length; i++) {
-                    for(let j = 0; j < placedShips[i].length; j++) {
+                // The cell has to be a part of the ship.
+                for (let i = 0; i < placedShips.length; i++) {
+                    for (let j = 0; j < placedShips[i].length; j++) {
                         // If cell is a part of placed ships, then display ships attacked!,
                         // Else display empty cell hit.
-                        if(cell === placedShips[i][j]) {
+                        if (cell === placedShips[i][j]) {
 
                         } else {
 
@@ -71,17 +76,23 @@ const board = (function() {
         }
     }
 
-    function setShipOnCells(event) {
+    function setShipOnCells(event, eventType) {
         let hoveredOverCell = parseInt(event.target.id)
 
-        // TODO: Using the same logic below,
-            // Create 5 different ships of different length.
-            // Make sure they are all made from one single function.
-            // One should be placed after another.
+        // Currently only creating ship of length 4
+        let deployedShip = deploy.shipOfLen(3, hoveredOverCell)
+        let coordinatesOfShip = []
 
-        // this is returning array tailored only for ship of length 5 for now.
-        // Make sure to implement the above to-do properly.
-        return deploy.shipOfLen(4, hoveredOverCell)
+        if (eventType === 'click') {
+            // Looping through returned delployedShip []
+            // and getting the coordinates for it to be used on our game board arr.
+            for (let i = 0; i < deployedShip.length; i++) {
+                coordinatesOfShip.push(deployedShip[i].id)
+            }
+            let ship = Ship(coordinatesOfShip)
+            ship.placeShip(gameArr, game.addShipToArr)
+        }
+        return deployedShip
     }
 
     function highlightCells(result, color) {
@@ -96,12 +107,12 @@ const board = (function() {
     }
 
     function onAndOffHover(event, callback) {
-        let result = setShipOnCells(event)
+        let result = setShipOnCells(event, event.type)
 
         if (result instanceof Array) {
-            if(event.type === 'mouseover') {
+            if (event.type === 'mouseover') {
                 callback(result, 'grey');
-            } else if(event.type === 'mouseleave') {
+            } else if (event.type === 'mouseleave') {
                 callback(result, 'transparent');
             } else if (event.type === 'click') {
                 callback(result, 'red')
@@ -129,8 +140,9 @@ const board = (function() {
     return {
         GameGrid,
         Ship,
-        initHoverOfCells
+        initHoverOfCells,
+        gameArr
     }
 })()
 
-export {board}
+export { board }

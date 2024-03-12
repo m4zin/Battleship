@@ -1,5 +1,6 @@
-import {board} from "./board";
-import {create} from "./createBoard";
+import { deploy } from "./shipsToDeploy";
+import { board } from "./board";
+import { create } from "./createBoard";
 import '../styles.css'
 import Typewriter from 'typewriter-effect/dist/core';
 
@@ -11,7 +12,7 @@ function typeWriteHeading() {
     });
 }
 
-(function() {
+(function () {
     typeWriteHeading()
 
     create.initCellsOfBoard()
