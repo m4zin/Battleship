@@ -4,6 +4,30 @@ const board = (function () {
     let game = GameGrid()
     let gameArr = game.arr
     let isHorizontal = true
+    let length = null
+
+    let ships = {
+        carrier: {
+            length: 5,
+            placed: false
+        },
+        battleship: {
+            length: 4,
+            placed: false
+        },
+        cruiser: {
+            length: 3,
+            placed: false
+        },
+        submarine: {
+            length: 3,
+            placed: false
+        },
+        destroyer: {
+            length: 2,
+            placed: false
+        },
+    }
 
     function Ship(coordinates) {
         let placeShip = (arr) => {
@@ -78,13 +102,37 @@ const board = (function () {
     function setShipOnCells(event, eventType, shipPosition) {
         let hoveredOverCell = parseInt(event.target.id)
 
+        // Implementing the below ships,
+        // Carrier (occupies 5 spaces), Battleship (4), Cruiser (3), Submarine (3), and Destroyer (2).
+
+        // If the last ship is placed then return.
+        if (ships.destroyer.placed === true) {
+            return
+        }
+
+        // Cycle through each ship and use their appropriate lengths.
+        for (let ship in ships) {
+            if (!ships[ship].placed) {
+                length = ships[ship].length
+                break;
+            }
+        }
+
         // Currently only creating ship of length 4
-        let deployedShip = deploy.shipOfLen(3, hoveredOverCell, shipPosition)
+        let deployedShip = deploy.shipOfLen(length, hoveredOverCell, shipPosition)
         let coordinatesOfShip = []
 
         if (eventType === 'click') {
-            // Looping through returned delployedShip []
-            // and getting the coordinates for it to be used on our game board arr.
+            // Once a specific ship is placed, loop to the next ship by denoting boolean for
+            // previous ship as placed.
+            for (let ship in ships) {
+                if (!ships[ship].placed) {
+                    ships[ship].placed = true
+                    break;
+                }
+            }
+
+            // Looping through returned delployedShip [] and getting the coordinates that'll be used on our game board arr.
             for (let i = 0; i < deployedShip.length; i++) {
                 coordinatesOfShip.push(deployedShip[i].id)
             }
@@ -140,10 +188,10 @@ const board = (function () {
             if (isHorizontal) {
                 isHorizontal = false
                 shipPositionBtn.innerHTML = 'Vertical'
-            } else {
-                isHorizontal = true
-                shipPositionBtn.innerHTML = 'Horizontal'
+                return
             }
+            isHorizontal = true
+            shipPositionBtn.innerHTML = 'Horizontal'
         })
     }
 

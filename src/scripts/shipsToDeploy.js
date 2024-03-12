@@ -5,6 +5,11 @@ const deploy = (function () {
         let arrCells = []
         let currCell = null
 
+        // Once all ships are placed.
+        if (length === 0) {
+            return
+        }
+
         for (let i = 0; i < length; i++) {
             currCell = document.getElementById(`${hoveredOverCell}`)
             if (currCell === null) {
