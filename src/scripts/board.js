@@ -100,7 +100,7 @@ const board = (function () {
     }
 
     function setShipOnCells(event, eventType, shipPosition) {
-        let hoveredOverCell = parseInt(event.target.id)
+        let selectedCell = parseInt(event.target.id)
 
         // Implementing the below ships,
         // Carrier (occupies 5 spaces), Battleship (4), Cruiser (3), Submarine (3), and Destroyer (2).
@@ -119,7 +119,7 @@ const board = (function () {
         }
 
         // Currently only creating ship of length 4
-        let deployedShip = deploy.shipOfLen(length, hoveredOverCell, shipPosition)
+        let deployedShip = deploy.shipOfLen(length, selectedCell, shipPosition)
         let coordinatesOfShip = []
 
         if (eventType === 'click') {
@@ -167,22 +167,31 @@ const board = (function () {
         })
     }
 
+    function handleCellHover(event) {
+        onAndOffHover(event, highlightCells)
+    }
+
+    function handleCellClick(event) {
+        let cellColor = event.target.style.backgroundColor
+
+        // We are also checking if it's not transparent because,
+        // If a ship is trying to be placed out of bounds, then it has to be rejected.
+        // The only time a ship can be placed is when that cell color turns grey.
+        if (cellColor !== 'red' && cellColor !== 'transparent') {
+            onAndOffHover(event, highlightCells)
+        }
+    }
+
     function initHoverOfCells() {
         const board = document.querySelector('.board-one')
         const cells = board.querySelectorAll('.cell')
         const shipPositionBtn = document.querySelector('.ship-position')
 
-        for (let i = 0; i < cells.length; i++) {
-            cells[i].addEventListener('mouseover', (event) => {
-                onAndOffHover(event, highlightCells)
-            })
-            cells[i].addEventListener('mouseleave', (event) => {
-                onAndOffHover(event, highlightCells)
-            })
-            cells[i].addEventListener('click', (event) => {
-                onAndOffHover(event, highlightCells)
-            })
-        }
+        cells.forEach(cell => {
+            cell.addEventListener('mouseover', handleCellHover)
+            cell.addEventListener('mouseleave', handleCellHover)
+            cell.addEventListener('click', handleCellClick)
+        })
 
         shipPositionBtn.addEventListener('click', () => {
             if (isHorizontal) {

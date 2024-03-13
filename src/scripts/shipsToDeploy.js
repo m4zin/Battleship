@@ -1,5 +1,3 @@
-import { board } from "./board"
-
 const deploy = (function () {
     function pushShipIntoArr(length, hoveredOverCell, subtractCells) {
         let arrCells = []

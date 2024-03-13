@@ -1,6 +1,5 @@
-import { deploy } from "./shipsToDeploy";
-import { board } from "./board";
 import { create } from "./createBoard";
+import { board } from "./board";
 import '../styles.css'
 import Typewriter from 'typewriter-effect/dist/core';
 
