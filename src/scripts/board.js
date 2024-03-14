@@ -1,9 +1,11 @@
 import { deploy } from "./shipsToDeploy";
+import { computer } from "./computer";
 
 const board = (function () {
     let game = GameGrid()
     let gameArr = game.arr
     let isHorizontal = true
+    // Lengths of ship changes when ship placed.
     let length = null
 
     let ships = {
@@ -99,15 +101,24 @@ const board = (function () {
         }
     }
 
-    function setShipOnCells(event, eventType, shipPosition) {
-        let selectedCell = parseInt(event.target.id)
+    function removerPlayerListeners() {
+        const board = document.querySelector('.board-one')
+        const cells = board.querySelectorAll('.cell')
 
-        // Implementing the below ships,
-        // Carrier (occupies 5 spaces), Battleship (4), Cruiser (3), Submarine (3), and Destroyer (2).
+        cells.forEach(cell => {
+            cell.removeEventListener('mouseover', handleCellHover)
+            cell.removeEventListener('mouseleave', handleCellHover)
+            cell.removeEventListener('click', handleCellClick)
+        })
+    }
 
-        // If the last ship is placed then return.
-        if (ships.destroyer.placed === true) {
-            return
+    // This func is now not depending on global vars.
+    // Insepct the params carefully, and use it for deploying ships -
+    // on computer board.
+    // eventType 'random' used for computer board.
+    function setShipOnCells(ships, cell, gameArr, eventType, shipPosition) {
+        if (ships.destroyer.placed) {
+            return true
         }
 
         // Cycle through each ship and use their appropriate lengths.
@@ -119,10 +130,10 @@ const board = (function () {
         }
 
         // Currently only creating ship of length 4
-        let deployedShip = deploy.shipOfLen(length, selectedCell, shipPosition)
+        let deployedShip = deploy.shipOfLen(length, cell, shipPosition)
         let coordinatesOfShip = []
 
-        if (eventType === 'click') {
+        if (eventType === 'click' || eventType === 'random') {
             // Once a specific ship is placed, loop to the next ship by denoting boolean for
             // previous ship as placed.
             for (let ship in ships) {
@@ -138,12 +149,18 @@ const board = (function () {
             }
             let ship = Ship(coordinatesOfShip)
             ship.placeShip(gameArr)
-        }
+        } 
         return deployedShip
     }
 
     function onAndOffHover(event, callback) {
-        let result = setShipOnCells(event, event.type, isHorizontal)
+        let cell = event.target.id
+        let result = setShipOnCells(ships, cell, gameArr, event.type, isHorizontal)
+
+        // result will only return true when all ships have been placed.
+        if (result === true) {
+            removerPlayerListeners()
+        }
 
         if (result instanceof Array) {
             if (event.type === 'mouseover') {
@@ -182,10 +199,10 @@ const board = (function () {
         }
     }
 
-    function initHoverOfCells() {
+    function initHoverAndPosOfCells() {
         const board = document.querySelector('.board-one')
         const cells = board.querySelectorAll('.cell')
-        const shipPositionBtn = document.querySelector('.ship-position')
+        const shipPosBtn = document.querySelector('.ship-position')
 
         cells.forEach(cell => {
             cell.addEventListener('mouseover', handleCellHover)
@@ -193,21 +210,18 @@ const board = (function () {
             cell.addEventListener('click', handleCellClick)
         })
 
-        shipPositionBtn.addEventListener('click', () => {
-            if (isHorizontal) {
-                isHorizontal = false
-                shipPositionBtn.innerHTML = 'Vertical'
-                return
-            }
-            isHorizontal = true
-            shipPositionBtn.innerHTML = 'Horizontal'
-        })
+        shipPosBtn.addEventListener('click', toggleShipPosition);
+    }
+
+    function toggleShipPosition() {
+        isHorizontal = !isHorizontal;
+        document.querySelector('.ship-position').innerHTML = isHorizontal ? 'Horizontal' : 'Vertical';
     }
 
     return {
         GameGrid,
         Ship,
-        initHoverOfCells
+        initHoverAndPosOfCells
     }
 })()
 
