@@ -15,6 +15,6 @@ function typeWriteHeading() {
     typeWriteHeading()
 
     create.initCellsOfBoard()
-    board.initHoverOfCells()
+    board.initHoverAndPosOfCells()
 })()
 
