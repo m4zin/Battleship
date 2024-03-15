@@ -1,25 +1,4 @@
 const deploy = (function () {
-    function pushShipIntoArr(length, hoveredOverCell, subtractCells) {
-        let arrCells = []
-        let currCell = null
-
-        // Once all ships are placed.
-        if (length === 0) {
-            return
-        }
-
-        for (let i = 0; i < length; i++) {
-            currCell = document.getElementById(`${hoveredOverCell}`)
-            if (currCell === null) {
-                return
-            }
-            arrCells.push(currCell)
-            hoveredOverCell = hoveredOverCell - subtractCells
-        }
-
-        return arrCells
-    }
-
     function shipOfLen(length, hoveredOverCell, shipPosition) {
         let finalArr = null
 
@@ -39,6 +18,27 @@ const deploy = (function () {
         }
 
         return finalArr
+    }
+    
+    function pushShipIntoArr(length, hoveredOverCell, subtractCells) {
+        let arrCells = []
+        let currCell = null
+
+        // Once all ships are placed.
+        if (length === 0) {
+            return
+        }
+
+        for (let i = 0; i < length; i++) {
+            currCell = document.getElementById(`${hoveredOverCell}`)
+            if (currCell === null) {
+                return
+            }
+            arrCells.push(currCell)
+            hoveredOverCell = hoveredOverCell - subtractCells
+        }
+
+        return arrCells
     }
 
     function placeInOneRow(arrOfCells) {

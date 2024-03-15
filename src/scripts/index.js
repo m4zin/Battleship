@@ -1,5 +1,6 @@
-import { create } from "./createBoard";
+import { computer } from "./computer";
 import { board } from "./board";
+import { create } from "./createBoard";
 import '../styles.css'
 import Typewriter from 'typewriter-effect/dist/core';
 
