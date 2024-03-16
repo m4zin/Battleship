@@ -100,11 +100,10 @@ const board = (function () {
             cell.removeEventListener('mouseleave', handleCellHover)
             cell.removeEventListener('click', handleCellClick)
         })
-
-        computer.initComputerTurn()
     }
 
-    function setShipOnCells(ships, length, cell, game, eventType, shipPosition) {
+    function setShipOnCells(opponent, ships, length, cell, game, eventType, shipPosition) {
+        // If last ship is placed, then return
         if (ships.destroyer.placed) {
             return true
         }
@@ -117,7 +116,7 @@ const board = (function () {
             }
         }
 
-        let deployedShip = deploy.shipOfLen(length, cell, shipPosition)
+        let deployedShip = deploy.shipOfLen(opponent, length, cell, shipPosition)
         let coordinatesOfShip = []
 
         if (eventType === 'click' || eventType === 'random') {
@@ -132,12 +131,12 @@ const board = (function () {
             // Looping through returned delployedShip [] and getting the coordinates that'll be used on our game board arr.
             // It will also store in the placedShip [] of our game object, which will help us later on for the attack part.
             for (let i = 0; i < deployedShip.length; i++) {
-                coordinatesOfShip.push(deployedShip[i].id)
+                coordinatesOfShip.push(parseInt(deployedShip[i].id))
             }
             let ship = Ship(coordinatesOfShip)
             ship.placeShip(game.arr, game.addShipToArr)
 
-            // We would only need the value of each cell and not the element itself
+            // We would only need the value of each cell and not the element itself -
             // if we are setting ships on the computer board.
             if (eventType === 'random') {
                 return game.placedShips
@@ -148,8 +147,8 @@ const board = (function () {
     }
 
     function onAndOffHover(event, callback) {
-        let cell = event.target.id
-        let result = setShipOnCells(ships, length, cell, game, event.type, isHorizontal)
+        let cell = parseInt(event.target.id).toString()
+        let result = setShipOnCells('player', ships, length, cell, game, event.type, isHorizontal)
 
         // result will only return true when all ships have been placed.
         if (result === true) {
