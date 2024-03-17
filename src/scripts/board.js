@@ -100,6 +100,8 @@ const board = (function () {
             cell.removeEventListener('mouseleave', handleCellHover)
             cell.removeEventListener('click', handleCellClick)
         })
+
+        computer.initComputerTurn()
     }
 
     function setShipOnCells(opponent, ships, length, cell, game, eventType, shipPosition) {
@@ -119,6 +121,13 @@ const board = (function () {
         let deployedShip = deploy.shipOfLen(opponent, length, cell, shipPosition)
         let coordinatesOfShip = []
 
+        if (deployedShip === undefined) {
+            // Ship cannot be placed, handle this case appropriately
+            // e.g., try a different cell or log an error
+            // throw new Error();
+            return
+        }
+
         if (eventType === 'click' || eventType === 'random') {
             // Once a specific ship is placed, loop to the next ship by making placed bool to true.
             for (let ship in ships) {
@@ -131,18 +140,15 @@ const board = (function () {
             // Looping through returned delployedShip [] and getting the coordinates that'll be used on our game board arr.
             // It will also store in the placedShip [] of our game object, which will help us later on for the attack part.
             for (let i = 0; i < deployedShip.length; i++) {
-                coordinatesOfShip.push(parseInt(deployedShip[i].id))
+                coordinatesOfShip.push(parseInt(deployedShip[i].id).toString())
             }
-            let ship = Ship(coordinatesOfShip)
-            ship.placeShip(game.arr, game.addShipToArr)
 
             // We would only need the value of each cell and not the element itself -
             // if we are setting ships on the computer board.
             if (eventType === 'random') {
-                return game.placedShips
-            } 
-        } 
-
+                return coordinatesOfShip
+            }
+        }
         return deployedShip
     }
 
