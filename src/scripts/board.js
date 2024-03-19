@@ -104,7 +104,7 @@ const board = (function () {
         computer.initComputerTurn()
     }
 
-    function setShipOnCells(opponent, ships, length, cell, game, eventType, shipPosition) {
+    function setShipOnCells(opponent, ships, length, cell, eventType, shipPosition) {
         // If last ship is placed, then return
         if (ships.destroyer.placed) {
             return true
@@ -154,7 +154,7 @@ const board = (function () {
 
     function onAndOffHover(event, callback) {
         let cell = parseInt(event.target.id).toString()
-        let result = setShipOnCells('player', ships, length, cell, game, event.type, isHorizontal)
+        let result = setShipOnCells('player', ships, length, cell, event.type, isHorizontal)
 
         // result will only return true when all ships have been placed.
         if (result === true) {

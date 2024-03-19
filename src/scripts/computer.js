@@ -30,61 +30,78 @@ const computer = (function () {
 
     let length = null
 
-    function placeShips(computerBoard) {
-        // Math.floor(Math.random() * 100);
+    function placeShips(ships) {
         let cell = null
-        // Boolean(Math.round(Math.random()));
         let isHorizontal = null
 
         let ship = null
         let shipsPlaced = []
         let allShipsPlaced = false
+        let cellExists = null
 
         do {
             cell = Math.floor(Math.random() * 100);
             isHorizontal = Boolean(Math.round(Math.random()));
+            cellExists = false
 
             try {
-                ship = board.setShipOnCells('computer', ships, length, cell, computerBoard, 'random', isHorizontal)
+                ship = board.setShipOnCells('computer', ships, length, cell, 'random', isHorizontal)
+
+                // Undefined behavior would get returned whenever the ship placement is out of bounds.
+                if (ship === undefined) {
+                    continue
+                }
 
                 // When 5 ships are present, return.
-                if (shipsPlaced.length === 5) {
+                if (ship === true) {
                     allShipsPlaced = true
                 }
 
+                // Placing first ship if the array is empty.
                 if (shipsPlaced.length === 0) {
                     shipsPlaced.push(ship)
-                    let shipObj = board.Ship(ship)
-                    shipObj.placeShip(computerBoard.arr, computerBoard.addShipToArr)
                     continue;
                 }
 
+                outerLoop:
                 for (let i = 0; i < shipsPlaced.length; i++) {
                     for (let j = 0; j < shipsPlaced[i].length; j++) {
                         if (ship.some(elem => elem === shipsPlaced[i][j])) {
-                            continue;
+                            let currentShipName = Object.keys(ships).find(shipName => ships[shipName].length === ship.length);
+                            ships[currentShipName].placed = false
+                            cellExists = true
+                            break outerLoop;
                         } 
                     }
                 }
 
-                shipsPlaced.push(ship)
-                let shipObj = board.Ship(ship)
-                shipObj.placeShip(computerBoard.arr, computerBoard.addShipToArr)
+                if (cellExists === true) {
+                    continue;
+                } else {
+                    shipsPlaced.push(ship)
+                }
             } catch (error) {
                 continue
             }
         } while (!allShipsPlaced)
 
-        for (let i = 0; i < computerBoard.arr.length; i++) {
-            if (computerBoard.arr[i] === 1) {
-                document.getElementById(`${i}-computer`).style.backgroundColor = 'red'
+        // DEBUG
+        let count = 0 
+
+        for (let i = 0; i < shipsPlaced.length; i++) {
+            for (let j = 0; j < shipsPlaced[i].length; j++) {
+                count++
+                document.getElementById(`${shipsPlaced[i][j]}-computer`).style.backgroundColor = 'red'
             }
         }
 
+        console.log(count)
+        console.log(shipsPlaced)
+        // DEBUG
     }
 
     function initComputerTurn() {
-        placeShips(computerBoard)
+        placeShips(ships)
     }
 
     return {
