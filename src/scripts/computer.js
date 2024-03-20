@@ -1,5 +1,4 @@
 import { board } from "./board";
-import { deploy } from "./shipsToDeploy";
 
 const computer = (function () {
 
@@ -30,7 +29,7 @@ const computer = (function () {
 
     let length = null
 
-    function placeShips(ships) {
+    function randomizeShips(computerBoard, ships) {
         let cell = null
         let isHorizontal = null
 
@@ -85,30 +84,27 @@ const computer = (function () {
             }
         } while (!allShipsPlaced)
 
-        // DEBUG
-        let count = 0 
+        let shipOnGameBoard = null
 
         for (let i = 0; i < shipsPlaced.length; i++) {
-            for (let j = 0; j < shipsPlaced[i].length; j++) {
-                count++
-                document.getElementById(`${shipsPlaced[i][j]}-computer`).style.backgroundColor = 'red'
-            }
+            shipOnGameBoard = board.Ship(shipsPlaced[i])
+            shipOnGameBoard.placeShip(computerBoard.arr, computerBoard.addShipToArr)
         }
 
-        console.log(count)
-        console.log(shipsPlaced)
         // DEBUG
+        console.log(computerBoard.arr)
+        console.log(computerBoard.placedShips)
     }
 
     function initComputerTurn() {
-        placeShips(ships)
+        randomizeShips(computerBoard, ships)
     }
 
     return {
-        placeShips,
         initComputerTurn
     }
 
 })()
 
 export { computer }
+    
