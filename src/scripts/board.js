@@ -2,7 +2,7 @@ import { deploy } from "./shipsToDeploy";
 import { computer } from "./computer";
 
 const board = (function () {
-    let game = GameGrid()
+    let playerBoard = GameGrid()
 
     // Ship position
     let isHorizontal = true
@@ -60,34 +60,13 @@ const board = (function () {
         // This is used in function Ship.placeShip() to push the ship coordinates
         // into placedShips [].
         let addShipToArr = (coordinates) => {
-            placedShips.push([coordinates])
-        }
-
-        let receiveAttack = (e) => {
-            let cell = e.getAttribute('value')
-
-            if (placedShips) {
-                // This helps in identifying the ship as a whole when a cell is hit.
-                // The cell has to be a part of the ship.
-                for (let i = 0; i < placedShips.length; i++) {
-                    for (let j = 0; j < placedShips[i].length; j++) {
-                        // If cell is a part of placed ships, then display ships attacked!,
-                        // Else display empty cell hit.
-                        if (cell === placedShips[i][j]) {
-
-                        } else {
-
-                        }
-                    }
-                }
-            }
+            placedShips.push(coordinates)
         }
 
         return {
             arr,
             placedShips,
-            addShipToArr,
-            receiveAttack
+            addShipToArr
         }
     }
 
@@ -100,6 +79,9 @@ const board = (function () {
             cell.removeEventListener('mouseleave', handleCellHover)
             cell.removeEventListener('click', handleCellClick)
         })
+
+        console.log(playerBoard.arr)
+        console.log(playerBoard.placedShips)
 
         computer.initComputerTurn()
     }
@@ -122,9 +104,6 @@ const board = (function () {
         let coordinatesOfShip = []
 
         if (deployedShip === undefined) {
-            // Ship cannot be placed, handle this case appropriately
-            // e.g., try a different cell or log an error
-            // throw new Error();
             return
         }
 
@@ -155,6 +134,8 @@ const board = (function () {
     function onAndOffHover(event, callback) {
         let cell = parseInt(event.target.id).toString()
         let result = setShipOnCells('player', ships, length, cell, event.type, isHorizontal)
+        // Adding player ships to player's board.
+        let playerShip = null
 
         // result will only return true when all ships have been placed.
         if (result === true) {
@@ -167,9 +148,16 @@ const board = (function () {
             } else if (event.type === 'mouseleave') {
                 callback(result, 'transparent');
             } else if (event.type === 'click') {
+                // When clicked create ship object and add to player's board.
+                addShipToBoard(playerShip, result)
                 callback(result, 'red')
             }
         } 
+    }
+
+    function addShipToBoard(playerShip, result) {
+        playerShip = Ship(result.map(elem => parseInt(elem.id).toString()))
+        playerShip.placeShip(playerBoard.arr, playerBoard.addShipToArr)
     }
 
     function highlightCells(result, color) {
@@ -190,10 +178,14 @@ const board = (function () {
     function handleCellClick(event) {
         let cellColor = event.target.style.backgroundColor
 
-        // We are also checking if it's not transparent because,
-        // If a ship is trying to be placed out of bounds, then it has to be rejected.
-        // The only time a ship can be placed is when that cell color turns grey.
-        if (cellColor !== 'red' && cellColor !== 'transparent') {
+        // Don't know if we need this anymore. But keeping just in case.
+            // We are also checking if it's not transparent because,
+            // If a ship is trying to be placed out of bounds, then it has to be rejected.
+            // The only time a ship can be placed is when that cell color turns grey.
+            // if (cellColor !== 'red' && cellColor !== 'transparent') {
+            //     onAndOffHover(event, highlightCells)
+            // }
+        if (cellColor === 'grey') {
             onAndOffHover(event, highlightCells)
         }
     }
